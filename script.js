@@ -6,6 +6,8 @@ function calculateRoute() {
   const display = document.getElementById('routeDisplay');
   
   if (selectedSource && selectedDest) {
+    display.style.display = 'block';
+
     const dx = selectedDest.x - selectedSource.x;
     const dy = selectedDest.y - selectedSource.y;
 
@@ -22,6 +24,7 @@ function calculateRoute() {
     const result = movements.length > 0 ? movements.join(' and ') : "Already at destination";
     display.innerHTML = `<strong>Route:</strong> ${result}`;
   } else {
+    display.style.display = 'none';
     display.innerHTML = "";
   }
 }
