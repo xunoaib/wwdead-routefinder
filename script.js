@@ -18,6 +18,8 @@ function clearField(inputId, selectionKey) {
 }
 
 function calculateRoute() {
+  updateValidationStyles();
+
   const display = document.getElementById('routeDisplay');
   
   if (selectedSource && selectedDest) {
@@ -102,6 +104,31 @@ async function onLoad() {
 
   setupAutocomplete('sourceInput', 'sourceDropdown', 'source');
   setupAutocomplete('destInput', 'destDropdown', 'dest');
+}
+
+function updateValidationStyles() {
+    const sourceInput = document.getElementById('sourceInput');
+    const destInput = document.getElementById('destInput');
+
+    if (selectedSource) {
+        sourceInput.classList.add('is-valid');
+        sourceInput.classList.remove('is-invalid');
+    } else if (sourceInput.value.length > 0) {
+        sourceInput.classList.add('is-invalid');
+        sourceInput.classList.remove('is-valid');
+    } else {
+        sourceInput.classList.remove('is-valid', 'is-invalid');
+    }
+
+    if (selectedDest) {
+        destInput.classList.add('is-valid');
+        destInput.classList.remove('is-invalid');
+    } else if (destInput.value.length > 0) {
+        destInput.classList.add('is-invalid');
+        destInput.classList.remove('is-valid');
+    } else {
+        destInput.classList.remove('is-valid', 'is-invalid');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

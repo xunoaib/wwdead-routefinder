@@ -55,3 +55,19 @@ input:focus { outline: none; border-color: var(--primary); ring: 2px solid #bfdb
 input:not(:placeholder-shown) + .clear-input {
   display: block;
 }
+
+/* Neutral state (optional) */
+input {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    border: 1px solid #ccc;
+}
+
+.is-valid {
+    background-color: #e6fffa !important;
+    border-color: #38a169 !important;
+}
+
+.is-invalid {
+    background-color: #fff5f5 !important;
+    border-color: #e53e3e !important;
+}
