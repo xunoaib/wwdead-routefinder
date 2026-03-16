@@ -2,6 +2,21 @@ let selectedSource = null;
 let selectedDest = null;
 let location_list = null;
 
+function clearField(inputId, selectionKey) {
+    const input = document.getElementById(inputId);
+    input.value = '';
+    
+    if (selectionKey === 'source') {
+        selectedSource = null;
+    } else {
+        selectedDest = null;
+    }
+    
+    calculateRoute();
+    
+    input.focus();
+}
+
 function calculateRoute() {
   const display = document.getElementById('routeDisplay');
   

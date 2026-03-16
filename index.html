@@ -36,6 +36,32 @@
             width: 100%; background: var(--primary); color: white; border: none; 
             padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; 
         }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .clear-input {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            line-height: 1;
+            display: none; /* Hidden by default */
+            user-select: none;
+        }
+
+        .clear-input:hover {
+            color: #ef4444;
+        }
+
+        /* Show the X only when the input has text */
+        input:not(:placeholder-shown) + .clear-input {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -43,17 +69,23 @@
 <div class="card">
     <h2>Route Planner</h2>
     
-    <div class="input-group">
-        <label>Source</label>
-        <input type="text" id="sourceInput" placeholder="Type city or lat, long..." autocomplete="off">
-        <div id="sourceDropdown" class="dropdown"></div>
+            <div class="input-group">
+    <label>Source</label>
+    <div class="input-wrapper">
+        <input type="text" id="sourceInput" placeholder="Type city..." autocomplete="off">
+        <span class="clear-input" onclick="clearField('sourceInput', 'source')">&times;</span>
     </div>
+    <div id="sourceDropdown" class="dropdown"></div>
+</div>
 
-    <div class="input-group">
-        <label>Destination</label>
-        <input type="text" id="destInput" placeholder="Type city or lat, long..." autocomplete="off">
-        <div id="destDropdown" class="dropdown"></div>
+<div class="input-group">
+    <label>Destination</label>
+    <div class="input-wrapper">
+        <input type="text" id="destInput" placeholder="Type city..." autocomplete="off">
+        <span class="clear-input" onclick="clearField('destInput', 'dest')">&times;</span>
     </div>
+    <div id="destDropdown" class="dropdown"></div>
+</div>
 
     <div id="routeDisplay" style="display: none; margin-top: 20px; font-family: sans-serif; padding: 10px; border-left: 4px solid #007bff; background: #f0f7ff;">
     </div>
