@@ -9,6 +9,8 @@ async function fetchLocations() {
 }
 
 function calculateRoute() {
+  const display = document.getElementById('routeDisplay');
+  
   if (selectedSource && selectedDest) {
     const dx = selectedDest.x - selectedSource.x;
     const dy = selectedDest.y - selectedSource.y;
@@ -16,17 +18,17 @@ function calculateRoute() {
     let movements = [];
 
     if (dy !== 0) {
-      movements.push(`${Math.abs(dy)} ${dy > 0 ? 'South' : 'North'}`);
+      movements.push(`${Math.abs(dy)} units ${dy > 0 ? 'South' : 'North'}`);
     }
     
     if (dx !== 0) {
-      movements.push(`${Math.abs(dx)} ${dx > 0 ? 'East' : 'West'}`);
+      movements.push(`${Math.abs(dx)} units ${dx > 0 ? 'East' : 'West'}`);
     }
 
     const result = movements.length > 0 ? movements.join(' and ') : "Already at destination";
-    alert(`Route: ${result}`);
+    display.innerHTML = `<strong>Route:</strong> ${result}`;
   } else {
-    alert("Please select both locations from the suggestions.");
+    display.innerHTML = "";
   }
 }
 
@@ -40,6 +42,8 @@ function setupAutocomplete(inputId, dropdownId, selectionKey) {
 
     if (selectionKey === 'source') selectedSource = null;
     else selectedDest = null;
+    
+    calculateRoute();
 
     if (!val) { dropdown.style.display = 'none'; return; }
 
@@ -51,6 +55,7 @@ function setupAutocomplete(inputId, dropdownId, selectionKey) {
       dropdown.style.display = 'block';
       filtered.forEach(loc => {
         const item = document.createElement('div');
+        item.className = 'dropdown-item';
         item.innerHTML = `${loc.name} <small>[${loc.x}, ${loc.y}]</small>`;
 
         item.onclick = () => {
@@ -60,6 +65,8 @@ function setupAutocomplete(inputId, dropdownId, selectionKey) {
           else selectedDest = loc;
 
           dropdown.style.display = 'none';
+          
+          calculateRoute();
         };
         dropdown.appendChild(item);
       });
