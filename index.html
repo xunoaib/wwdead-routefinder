@@ -1,98 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Location Selector</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --bg: #f8fafc;
-            --border: #e2e8f0;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WWDead / Urban Dead Route Finder</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
 
-        body { font-family: sans-serif; background: var(--bg); padding: 2rem; display: flex; justify-content: center; }
-        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        
-        .input-group { position: relative; margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #1e293b; }
-        
-        input { 
-            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; 
-            box-sizing: border-box; font-size: 1rem; transition: border-color 0.2s;
-        }
-        input:focus { outline: none; border-color: var(--primary); ring: 2px solid #bfdbfe; }
+        <div class="card">
+            <h2>Route Planner</h2>
 
-        .dropdown {
-            position: absolute; width: 100%; background: white; border: 1px solid var(--border);
-            border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto;
-            z-index: 10; display: none; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-        }
-        .dropdown div { padding: 10px; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
-        .dropdown div:hover { background-color: #f1f5f9; }
-        .dropdown div span { display: block; font-size: 0.8rem; color: #64748b; }
-
-        .btn { 
-            width: 100%; background: var(--primary); color: white; border: none; 
-            padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; 
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .clear-input {
-            position: absolute;
-            right: 10px;
-            cursor: pointer;
-            color: #94a3b8;
-            font-size: 1.5rem;
-            line-height: 1;
-            display: none; /* Hidden by default */
-            user-select: none;
-        }
-
-        .clear-input:hover {
-            color: #ef4444;
-        }
-
-        /* Show the X only when the input has text */
-        input:not(:placeholder-shown) + .clear-input {
-            display: block;
-        }
-    </style>
-</head>
-<body>
-
-<div class="card">
-    <h2>Route Planner</h2>
-    
             <div class="input-group">
-    <label>Source</label>
-    <div class="input-wrapper">
-        <input type="text" id="sourceInput" placeholder="Type city..." autocomplete="off">
-        <span class="clear-input" onclick="clearField('sourceInput', 'source')">&times;</span>
-    </div>
-    <div id="sourceDropdown" class="dropdown"></div>
-</div>
+                <label>Source</label>
+                <div class="input-wrapper">
+                    <input type="text" id="sourceInput" placeholder="Type city..." autocomplete="off">
+                    <span class="clear-input" onclick="clearField('sourceInput', 'source')">&times;</span>
+                </div>
+                <div id="sourceDropdown" class="dropdown"></div>
+            </div>
 
-<div class="input-group">
-    <label>Destination</label>
-    <div class="input-wrapper">
-        <input type="text" id="destInput" placeholder="Type city..." autocomplete="off">
-        <span class="clear-input" onclick="clearField('destInput', 'dest')">&times;</span>
-    </div>
-    <div id="destDropdown" class="dropdown"></div>
-</div>
+            <div class="input-group">
+                <label>Destination</label>
+                <div class="input-wrapper">
+                    <input type="text" id="destInput" placeholder="Type city..." autocomplete="off">
+                    <span class="clear-input" onclick="clearField('destInput', 'dest')">&times;</span>
+                </div>
+                <div id="destDropdown" class="dropdown"></div>
+            </div>
 
-    <div id="routeDisplay" style="display: none; margin-top: 20px; font-family: sans-serif; padding: 10px; border-left: 4px solid #007bff; background: #f0f7ff;">
-    </div>
+            <div id="routeDisplay" style="display: none; margin-top: 20px; font-family: sans-serif; padding: 10px; border-left: 4px solid #007bff; background: #f0f7ff;">
+            </div>
 
-</div>
+        </div>
 
-<script src="script.js"></script>
+        <script src="script.js"></script>
 
-</body>
+    </body>
 </html>
