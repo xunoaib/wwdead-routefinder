@@ -1,84 +1,87 @@
+let selectedSource = null;
+let selectedDest = null;
+let locations = null;
+let grid = null;
+
 async function fetchLocations() {
-  const response = await fetch('./locations.json');
+  const response = await fetch('locations.json');
   return await response.json();
 }
 
 function calculateRoute() {
-  const start = document.getElementById('sourceInput').value;
-  const end = document.getElementById('destInput').value;
+  if (selectedSource && selectedDest) {
+    const dx = selectedDest.x - selectedSource.x;
+    const dy = selectedDest.y - selectedSource.y;
 
-  console.log(start);
+    let movements = [];
 
-  if (start && end) {
-    alert(`Routing from: ${start}\nTo: ${end}`);
+    if (dy !== 0) {
+      movements.push(`${Math.abs(dy)} ${dy > 0 ? 'South' : 'North'}`);
+    }
+    
+    if (dx !== 0) {
+      movements.push(`${Math.abs(dx)} ${dx > 0 ? 'East' : 'West'}`);
+    }
+
+    const result = movements.length > 0 ? movements.join(' and ') : "Already at destination";
+    alert(`Route: ${result}`);
   } else {
-    alert("Please select both locations.");
+    alert("Please select both locations from the suggestions.");
   }
 }
 
-async function onLoad() {
+function setupAutocomplete(inputId, dropdownId, selectionKey) {
+  const input = document.getElementById(inputId);
+  const dropdown = document.getElementById(dropdownId);
 
-  const grid = await fetchLocations();
-  const locations = grid.flatMap((row, r) => row.map((col, c) => ({
+  input.addEventListener('input', () => {
+    const val = input.value.toLowerCase();
+    dropdown.innerHTML = '';
+
+    if (selectionKey === 'source') selectedSource = null;
+    else selectedDest = null;
+
+    if (!val) { dropdown.style.display = 'none'; return; }
+
+    const filtered = locations.filter(loc => 
+      loc.name.toLowerCase().includes(val)
+    );
+
+    if (filtered.length > 0) {
+      dropdown.style.display = 'block';
+      filtered.forEach(loc => {
+        const item = document.createElement('div');
+        item.innerHTML = `${loc.name} <small>[${loc.x}, ${loc.y}]</small>`;
+
+        item.onclick = () => {
+          input.value = `${loc.name} [${loc.x}, ${loc.y}]`;
+          
+          if (selectionKey === 'source') selectedSource = loc;
+          else selectedDest = loc;
+
+          dropdown.style.display = 'none';
+        };
+        dropdown.appendChild(item);
+      });
+    } else {
+      dropdown.style.display = 'none';
+    }
+  });
+}
+
+async function onLoad() {
+  grid = await fetchLocations();
+  locations = grid.flatMap((row, r) => row.map((col, c) => ({
     name: col[1],
     y: r,
     x: c,
     type: col[0]
   })));
 
-  function setupAutocomplete(inputId, dropdownId) {
-    const input = document.getElementById(inputId);
-    const dropdown = document.getElementById(dropdownId);
-
-    input.addEventListener('input', () => {
-      const val = input.value.toLowerCase();
-      dropdown.innerHTML = '';
-
-      if (!val) { dropdown.style.display = 'none'; return; }
-
-      // Check if input is likely a coordinate (e.g., "40, -70")
-      const isCoord = /^-?\d+\.?\d*,\s*-?\d+\.?\d*$/.test(val);
-
-      const filtered = locations.filter(loc => 
-        loc.name.toLowerCase().includes(val)
-      );
-
-      if (filtered.length > 0) {
-        dropdown.style.display = 'block';
-        filtered.forEach(loc => {
-          const item = document.createElement('div');
-          item.innerHTML = `${loc.name} <span>[${loc.x}, ${loc.y}]</span>`;
-          item.onclick = () => {
-            input.value = `${loc.name} [${loc.x}, ${loc.y}]`;
-            dropdown.style.display = 'none';
-          };
-          dropdown.appendChild(item);
-        });
-      } else if (isCoord) {
-        // If user types raw valid coords, give them an option to use it
-        dropdown.style.display = 'block';
-        const item = document.createElement('div');
-        item.innerHTML = `Use coordinates: <span>${val}</span>`;
-        item.onclick = () => {
-          input.value = val;
-          dropdown.style.display = 'none';
-        };
-        dropdown.appendChild(item);
-      } else {
-        dropdown.style.display = 'none';
-      }
-    });
-
-    // Hide dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (e.target !== input) dropdown.style.display = 'none';
-    });
-  }
-
-  setupAutocomplete('sourceInput', 'sourceDropdown');
-  setupAutocomplete('destInput', 'destDropdown');
+  setupAutocomplete('sourceInput', 'sourceDropdown', 'source');
+  setupAutocomplete('destInput', 'destDropdown', 'dest');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  onLoad().catch(err => console.error("Initialization failed", err))
-})
+  onLoad().catch(err => console.error("Initialization failed", err));
+});
