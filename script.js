@@ -1,12 +1,6 @@
 let selectedSource = null;
 let selectedDest = null;
-let locations = null;
-let grid = null;
-
-async function fetchLocations() {
-  const response = await fetch('locations.json');
-  return await response.json();
-}
+let location_list = null;
 
 function calculateRoute() {
   const display = document.getElementById('routeDisplay');
@@ -47,7 +41,7 @@ function setupAutocomplete(inputId, dropdownId, selectionKey) {
 
     if (!val) { dropdown.style.display = 'none'; return; }
 
-    const filtered = locations.filter(loc => 
+    const filtered = location_list.filter(loc => 
       loc.name.toLowerCase().includes(val)
     );
 
@@ -77,8 +71,11 @@ function setupAutocomplete(inputId, dropdownId, selectionKey) {
 }
 
 async function onLoad() {
-  grid = await fetchLocations();
-  locations = grid.flatMap((row, r) => row.map((col, c) => ({
+
+  let locations = (await (await fetch('locations.json')).json());
+  let suburbs = (await (await fetch('suburbs.json')).json());
+
+  location_list = locations.flatMap((row, r) => row.map((col, c) => ({
     name: col[1],
     y: r,
     x: c,
