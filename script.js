@@ -28,14 +28,28 @@ function calculateRoute() {
     const dx = selectedDest.x - selectedSource.x;
     const dy = selectedDest.y - selectedSource.y;
 
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+    const diag = Math.min(absX, absY);
+    const remainingX = absX - diag;
+    const remainingY = absY - diag;
+
     let movements = [];
 
-    if (dy !== 0) {
-      movements.push(`${Math.abs(dy)} units ${dy > 0 ? 'South' : 'North'}`);
+    if (diag > 0) {
+      const vert = dy > 0 ? 'south' : 'north';
+      const horiz = dx > 0 ? 'east' : 'west';
+      movements.push(`${diag} ${diag === 1 ? 'block' : 'blocks'} ${vert}${horiz}`);
     }
-    
-    if (dx !== 0) {
-      movements.push(`${Math.abs(dx)} units ${dx > 0 ? 'East' : 'West'}`);
+
+    if (remainingY > 0) {
+      const dir = dy > 0 ? 'south' : 'north';
+      movements.push(`${remainingY} ${remainingY === 1 ? 'block' : 'blocks'} ${dir}`);
+    }
+
+    if (remainingX > 0) {
+      const dir = dx > 0 ? 'east' : 'west';
+      movements.push(`${remainingX} ${remainingX === 1 ? 'block' : 'blocks'} ${dir}`);
     }
 
     const result = movements.length > 0 ? movements.join(' and ') : "Already at destination";
